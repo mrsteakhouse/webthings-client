@@ -33,6 +33,7 @@ export class WebThingsClient extends EventEmitter {
   }
 
     private protocol: string;
+    private webSocketProtocol: string;
 
     private fetchOptions: RequestInit = {};
     private webSocketClientConfig: IClientConfig = {};
@@ -43,6 +44,7 @@ export class WebThingsClient extends EventEmitter {
     constructor(public address: string, private port: number, public token: string, useHttps = false, skipValidation = false) {
       super();
       this.protocol = useHttps ? 'https' : 'http';
+      this.webSocketProtocol = useHttps ? 'wss' : 'ws';
 
       if (skipValidation) {
         this.fetchOptions = {
@@ -122,7 +124,7 @@ export class WebThingsClient extends EventEmitter {
     }
 
     public async connect(port = 8080): Promise<void> {
-      const socketUrl = `ws://${this.address}:${port}/things`;
+      const socketUrl = `${this.webSocketProtocol}://${this.address}:${port}/things`;
       const webSocketClient = new WebSocketClient(this.webSocketClientConfig);
 
       await new Promise<void>((resolve, reject) => {
