@@ -6,11 +6,10 @@
 
 import fetch, {RequestInit} from 'node-fetch';
 import {EventEmitter} from 'events';
-import { client as WebSocketClient, connection as WebSocketConnection, IClientConfig, IMessage } from 'websocket';
+import {client as WebSocketClient, connection as WebSocketConnection, IClientConfig, IMessage} from 'websocket';
 import {Device, DeviceDescription} from './device';
 import {Event, EventDescription} from './event';
 import {Agent} from 'https';
-import https from 'https';
 
 export class WebThingsClient extends EventEmitter {
   public static async local(token: string): Promise<WebThingsClient> {
@@ -34,9 +33,11 @@ export class WebThingsClient extends EventEmitter {
   }
 
     private protocol: string;
+
     private webSocketProtocol: string;
 
     private fetchOptions: RequestInit = {};
+
     private webSocketClientConfig: IClientConfig = {};
 
     private connection?: WebSocketConnection;
@@ -49,18 +50,18 @@ export class WebThingsClient extends EventEmitter {
 
       if (skipValidation) {
         this.fetchOptions = {
-          agent: new https.Agent({
+          agent: new Agent({
             rejectUnauthorized: false,
           }),
         };
         this.webSocketClientConfig = {
           tlsOptions: {
-            agent: new https.Agent({
+            agent: new Agent({
               rejectUnauthorized: false,
             }),
             rejectUnauthorized: false,
-          }
-        }
+          },
+        };
       }
     }
 
