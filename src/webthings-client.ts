@@ -10,6 +10,7 @@ import { client as WebSocketClient, connection as WebSocketConnection, IClientCo
 import {Device, DeviceDescription} from './device';
 import {Event, EventDescription} from './event';
 import {Agent} from 'https';
+import https from 'https';
 
 export class WebThingsClient extends EventEmitter {
   public static async local(token: string): Promise<WebThingsClient> {
@@ -48,13 +49,13 @@ export class WebThingsClient extends EventEmitter {
 
       if (skipValidation) {
         this.fetchOptions = {
-          agent: new Agent({
+          agent: new https.Agent({
             rejectUnauthorized: false,
           }),
         };
         this.webSocketClientConfig = {
           tlsOptions: {
-            agent: new Agent({
+            agent: new https.Agent({
               rejectUnauthorized: false,
             }),
             rejectUnauthorized: false,
