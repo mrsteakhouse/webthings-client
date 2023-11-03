@@ -54,7 +54,10 @@ export class WebThingsClient extends EventEmitter {
         };
         this.webSocketClientConfig = {
           tlsOptions: {
-            rejectUnauthorized: false
+            agent: new Agent({
+              rejectUnauthorized: false,
+            }),
+            rejectUnauthorized: false,
           }
         }
       }
