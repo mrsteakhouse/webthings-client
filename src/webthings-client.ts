@@ -32,13 +32,13 @@ export class WebThingsClient extends EventEmitter {
     return new WebThingsClient(address, port, token, https, skipValidation);
   }
 
-    private protocol: string;
+    private readonly protocol: string;
 
-    private webSocketProtocol: string;
+    private readonly webSocketProtocol: string;
 
-    private fetchOptions: RequestInit = {};
+    private readonly fetchOptions: RequestInit = {};
 
-    private webSocketClientConfig: IClientConfig = {};
+    private readonly webSocketClientConfig: IClientConfig = {};
 
     private connection?: WebSocketConnection;
 
@@ -56,9 +56,6 @@ export class WebThingsClient extends EventEmitter {
         };
         this.webSocketClientConfig = {
           tlsOptions: {
-            agent: new Agent({
-              rejectUnauthorized: false,
-            }),
             rejectUnauthorized: false,
           },
         };
