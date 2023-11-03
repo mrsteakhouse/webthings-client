@@ -6,7 +6,7 @@
 
 import fetch, {RequestInit} from 'node-fetch';
 import {EventEmitter} from 'events';
-import {client as WebSocketClient, connection as WebSocketConnection, IMessage} from 'websocket';
+import { client as WebSocketClient, connection as WebSocketConnection, IClientConfig, IMessage } from 'websocket';
 import {Device, DeviceDescription} from './device';
 import {Event, EventDescription} from './event';
 import {Agent} from 'https';
@@ -35,6 +35,7 @@ export class WebThingsClient extends EventEmitter {
     private protocol: string;
 
     private fetchOptions: RequestInit = {};
+    private webSocketClientConfig: IClientConfig = {};
 
     private connection?: WebSocketConnection;
 
@@ -49,6 +50,11 @@ export class WebThingsClient extends EventEmitter {
             rejectUnauthorized: false,
           }),
         };
+        this.webSocketClientConfig = {
+          tlsOptions: {
+            rejectUnauthorized: false
+          }
+        }
       }
     }
 
@@ -117,7 +123,7 @@ export class WebThingsClient extends EventEmitter {
 
     public async connect(port = 8080): Promise<void> {
       const socketUrl = `ws://${this.address}:${port}/things`;
-      const webSocketClient = new WebSocketClient();
+      const webSocketClient = new WebSocketClient(this.webSocketClientConfig);
 
       await new Promise<void>((resolve, reject) => {
         webSocketClient.on('connect', async (connection: WebSocketConnection) => {
